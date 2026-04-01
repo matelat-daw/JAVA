@@ -113,7 +113,7 @@ public class UserController {
     }
 
     /**
-     * Obtiene la lista de todos los usuarios (requiere ADMIN)
+     * Obtiene la lista de todos los usuarios EXCEPTO ADMIN (requiere ADMIN)
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -125,10 +125,18 @@ public class UserController {
             Pageable pageable = PageRequest.of(page, size);
             Page<User> usersPage = userRepository.findAll(pageable);
 
+            // Filtrar usuarios: excluir aquellos con rol ADMIN
             List<UserDto> userDtos = usersPage.getContent()
                     .stream()
+                    .filter(user -> user.getRole() != Role.ADMIN)
                     .map(UserDto::fromEntity)
                     .collect(Collectors.toList());
+
+            // Recalcular paginación después del filtro
+            int totalFiltered = (int) usersPage.getContent()
+                    .stream()
+                    .filter(user -> user.getRole() != Role.ADMIN)
+                    .count();
 
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("success", true);
@@ -136,7 +144,7 @@ public class UserController {
             responseData.put("users", userDtos);
             responseData.put("pagination", Map.of(
                     "currentPage", usersPage.getNumber(),
-                    "totalItems", usersPage.getTotalElements(),
+                    "totalItems", totalFiltered,
                     "totalPages", usersPage.getTotalPages(),
                     "pageSize", usersPage.getSize(),
                     "hasNext", usersPage.hasNext(),
@@ -209,6 +217,45 @@ public class UserController {
         } catch (Exception e) {
             log.error("Error al cambiar rol: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(AuthResponse.error(e.getMessage()));
+        }
+    }
+
+    /**
+     * Elimina un usuario específico (requiere ADMIN)
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AuthResponse> deleteUser(@PathVariable Long id) {
+        try {
+            log.info("🗑️ Eliminando usuario con ID: {}", id);
+            
+            User user = userService.getUserById(id)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + id));
+
+            String userEmail = user.getEmail();
+
+            // No permitir eliminar usuarios con rol ADMIN
+            if (user.getRole() == Role.ADMIN) {
+                log.warn("⚠️ Intento de eliminar usuario ADMIN con ID: {}", id);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(AuthResponse.error("No se puede eliminar usuarios con rol ADMIN"));
+            }
+
+            // El UserService se encargará de eliminar la imagen correctamente
+            userService.deleteUser(id);
+            log.info("✅ Usuario eliminado: {} (ID: {})", userEmail, id);
+
+            return ResponseEntity.ok(
+                    AuthResponse.success("Usuario eliminado exitosamente", null, null)
+            );
+        } catch (RuntimeException e) {
+            log.error("❌ Error al eliminar usuario: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(AuthResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            log.error("❌ Error interno al eliminar usuario: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(AuthResponse.error("Error al eliminar usuario: " + e.getMessage()));
         }
     }
 }

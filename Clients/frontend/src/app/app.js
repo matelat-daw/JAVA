@@ -104,13 +104,14 @@ class App {
         // Extraer la ruta (ahora la raíz es /)
         const parts = path.split('/').filter(Boolean);
         const route = parts.length > 0 ? parts[0] : 'home';
+        const param = parts.length > 1 ? parts[1] : null;
         
-        console.log(`📍 Navegando a: ${route} (ruta completa: ${path})`);
+        console.log(`📍 Navegando a: ${route}${param ? '/' + param : ''} (ruta completa: ${path})`);
         
         this.currentRoute = route;
         
         if (this.routes[route]) {
-            this.routes[route].call(this);
+            this.routes[route].call(this, param);
         } else {
             this.loadHome();
         }
@@ -513,8 +514,13 @@ class App {
 
     /**     * Carga la lista de usuarios (placeholder)
      */
-    loadUsers() {
-        console.log('👥 Cargando página de usuarios...');
+    loadUsers(userId) {
+        console.log('👥 Cargando página de usuarios...', userId ? '(ID: ' + userId + ')' : '(lista)');
+        
+        // Si hay un userId, cargar detalles
+        if (userId) {
+            return this.loadUserDetails(userId);
+        }
         
         // Mostrar HTML de usuarios inline mientras se carga
         const outlet = document.getElementById('router-outlet');
@@ -560,6 +566,43 @@ class App {
             window.UsersComponentInstance = this.usersComponent;
         }
         this.usersComponent.init();
+    }
+
+    /**
+     * Carga los detalles de un usuario específico
+     */
+    loadUserDetails(userId) {
+        console.log('[UserDetails] Cargando detalles del usuario:', userId);
+        
+        // DEBUGGING: Verificar qué está disponible en window
+        console.log('[DEBUG] Verificando disponibilidad de componentes:');
+        console.log('  - UserDetailsComponent:', typeof window.UserDetailsComponent);
+        console.log('  - AuthService:', typeof window.AuthService);
+        console.log('  - UserService:', typeof window.UserService);
+        
+        // Listar todas los objetos en AppScripts si existen
+        if (typeof AppScripts !== 'undefined') {
+            console.log('  - AppScripts.loaded:', Array.from(AppScripts.loaded));
+        }
+
+        try {
+            if (typeof UserDetailsComponent === 'undefined') {
+                console.error('[ERROR] UserDetailsComponent NO esta definida');
+                console.error('[ERROR] window.UserDetailsComponent:', window.UserDetailsComponent);
+                throw new Error('UserDetailsComponent no esta disponible. Intenta recargar la pagina (Ctrl+Shift+R)');
+            }
+            
+            console.log('[SUCCESS] UserDetailsComponent esta disponible, creando instancia...');
+            const component = new UserDetailsComponent();
+            console.log('[SUCCESS] Instancia creada, inicializando con userId:', userId);
+            component.init(userId);
+        } catch (error) {
+            console.error('[ERROR]', error);
+            const outlet = document.getElementById('router-outlet');
+            if (outlet) {
+                outlet.innerHTML = '<div class="alert alert-danger m-5"><h5>Error</h5><p>' + error.message + '</p><a href="/users" class="btn btn-primary">Volver</a></div>';
+            }
+        }
     }
 }
 

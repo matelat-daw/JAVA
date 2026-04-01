@@ -173,6 +173,59 @@ public class ImageService {
     }
 
     /**
+     * Elimina la imagen de perfil de un usuario específico
+     * - Si es imagen protegida (default), no elimina nada
+     * - Si es imagen personalizada, elimina todo el directorio del usuario
+     */
+    public void deleteProfileImage(Long userId, String imagePath) {
+        if (imagePath == null || imagePath.isEmpty()) {
+            log.warn("Ruta de imagen vacía para usuario: {}", userId);
+            return;
+        }
+
+        // Si es imagen protegida, no hacer nada
+        if (isProtectedImage(imagePath)) {
+            log.info("📸 Imagen protegida (por defecto) para usuario {}. No se eliminará.", userId);
+            return;
+        }
+
+        // Eliminar toda la carpeta del usuario
+        deleteUserProfileImages(userId);
+    }
+
+    /**
+     * Elimina todos los archivos de perfil de un usuario (carpeta completa)
+     * Se usa cuando se elimina la cuenta del usuario
+     */
+    public void deleteUserProfileImages(Long userId) {
+        try {
+            Path userPath = Paths.get(uploadDir, userId.toString());
+            
+            if (!Files.exists(userPath)) {
+                log.warn("📁 Carpeta de usuario no encontrada: {}", userPath);
+                return;
+            }
+
+            // Eliminar recursivamente toda la carpeta
+            Files.walk(userPath)
+                    .sorted((a, b) -> b.compareTo(a)) // Ordenar en reverso para eliminar primero archivos
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                            log.info("✅ Eliminado: {}", path);
+                        } catch (Exception e) {
+                            log.warn("⚠️ No se pudo eliminar: {} - {}", path, e.getMessage());
+                        }
+                    });
+
+            log.info("✅ Carpeta de imágenes del usuario {} eliminada completamente", userId);
+        } catch (Exception e) {
+            log.error("❌ Error al eliminar carpeta de imágenes del usuario {}: {}", userId, e.getMessage());
+            // No lanzar excepción, solo logging para no interrumpir la eliminación del usuario
+        }
+    }
+
+    /**
      * Valida el tipo de contenido de la imagen
      */
     private boolean isValidImageType(String contentType) {

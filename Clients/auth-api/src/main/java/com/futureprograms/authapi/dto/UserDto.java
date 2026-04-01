@@ -28,6 +28,7 @@ public class UserDto {
     private Boolean active;
     private Boolean emailVerified;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static UserDto fromEntity(User user) {
         return UserDto.builder()
@@ -45,6 +46,7 @@ public class UserDto {
                 .active(user.getActive())
                 .emailVerified(user.getEmailVerified())
                 .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }

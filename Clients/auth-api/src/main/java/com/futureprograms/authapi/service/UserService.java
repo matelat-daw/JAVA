@@ -241,6 +241,7 @@ public class UserService {
     /**
      * Elimina la cuenta del usuario (requiere confirmación con contraseña)
      */
+    @Transactional
     public void deleteUserAccount(Long id, String password) {
         Optional<User> userOpt = userRepository.findById(id);
 
@@ -255,9 +256,58 @@ public class UserService {
             throw new RuntimeException("Contraseña incorrecta - no se puede eliminar la cuenta");
         }
 
-        // Elim Inar usuario
+        // Eliminar imagen de perfil si existe
+        // - Si es imagen protegida (default), no se eliminará
+        // - Si es imagen personalizada, se eliminará la carpeta completa del usuario
+        if (user.getProfileImg() != null && !user.getProfileImg().isEmpty()) {
+            try {
+                imageService.deleteProfileImage(user.getId(), user.getProfileImg());
+                log.info("✅ Imágenes de perfil procesadas al eliminar cuenta: {}", user.getId());
+            } catch (Exception e) {
+                log.warn("⚠️ Error al eliminar imágenes de perfil: {}", e.getMessage());
+                // Continuar con eliminación de usuario aunque falle la imagen
+            }
+        }
+
+        // Eliminar usuario
         userRepository.delete(user);
-        log.info("Cuenta de usuario eliminada: {}", user.getEmail());
+        log.info("✅ Cuenta de usuario eliminada: {}", user.getEmail());
+    }
+
+    /**
+     * Elimina un usuario (solo para administradores, sin requerir contraseña)
+     */
+    @Transactional
+    public void deleteUser(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+        User user = userOpt.get();
+
+        // Validación adicional: no permitir eliminar admin
+        if (user.getRole() == Role.ADMIN) {
+            throw new RuntimeException("No se puede eliminar usuarios con rol ADMIN");
+        }
+
+        // Eliminar imagen de perfil si existe
+        // - Si es imagen protegida (default), no se eliminará
+        // - Si es imagen personalizada, se eliminará la carpeta completa del usuario
+        if (user.getProfileImg() != null && !user.getProfileImg().isEmpty()) {
+            try {
+                imageService.deleteProfileImage(user.getId(), user.getProfileImg());
+                log.info("✅ Imágenes de perfil procesadas para usuario: {}", user.getId());
+            } catch (Exception e) {
+                log.warn("⚠️ Error al eliminar imágenes de perfil: {}", e.getMessage());
+                // Continuar con eliminación de usuario aunque falle la imagen
+            }
+        }
+
+        // Eliminar usuario
+        userRepository.delete(user);
+        log.info("✅ Usuario eliminado por administrador: {} (ID: {})", user.getEmail(), id);
     }
 
     /**

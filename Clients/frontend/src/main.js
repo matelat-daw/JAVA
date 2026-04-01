@@ -9,7 +9,7 @@ async function initializeApp() {
         console.log('🚀 Inicializando Clients API Frontend...');
         const startTime = performance.now();
         
-        // Definir scripts requeridos
+        // Definir scripts requeridos (user-details es opcional, solo para admin)
         const requiredScripts = ['constants', 'utils', 'client.model', 'client.service', 'auth.service', 'navbar', 'register', 'login', 'dashboard', 'profile', 'users', 'app'];
         window.AppScripts.required = requiredScripts;
         

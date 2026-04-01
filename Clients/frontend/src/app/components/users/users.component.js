@@ -94,10 +94,24 @@ class UsersComponent {
     }
 
     renderAdminView() {
+        const currentUser = AuthService.getUserSession();
+        const userName = currentUser ? `${currentUser.name} ${currentUser.surname1}` : 'Usuario';
+        
         const html = `
             <div class="container-fluid py-5">
+                <!-- Saludo Usuario -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <i class="fas fa-user-check me-2"></i>
+                            <strong>¡Bienvenido Usuario: ${userName}!</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Header -->
-                <div class="row mb-5">
+                <div class="row mb-4">
                     <div class="col-12">
                         <h1 class="display-5 fw-bold mb-2">
                             <i class="fas fa-users me-3"></i>Lista de Usuarios
@@ -132,8 +146,8 @@ class UsersComponent {
         const rows = this.users.map(user => `
             <tr>
                 <td>
-                    ${user.profilePicture ? 
-                        `<img src="/profile-pictures/${user.profilePicture}" alt="${user.nick}" class="img-thumbnail rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">` :
+                    ${user.profileImg ? 
+                        `<img src="/api/images/${user.profileImg}" alt="${user.nick}" class="img-thumbnail rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">` :
                         `<div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="fas fa-user text-white"></i></div>`
                     }
                 </td>
@@ -156,7 +170,7 @@ class UsersComponent {
                         <button class="btn btn-outline-primary btn-sm" onclick="App.getInstance().navigateTo('/users/${user.id}')">
                             <i class="fas fa-eye"></i> Ver
                         </button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('¿Eliminar usuario?')) alert('Funcionalidad pendiente')">
+                        <button class="btn btn-outline-danger btn-sm" onclick="UsersComponent.confirmDelete(${user.id}, '${user.nick}')">
                             <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </div>
@@ -294,6 +308,170 @@ class UsersComponent {
             'GUEST': 'bg-secondary'
         };
         return roleBadgeMap[role] || 'bg-secondary';
+    }
+
+    /**
+     * Confirma y elimina un usuario
+     */
+    static async confirmDelete(userId, userNick) {
+        // Crear modal de confirmación
+        const modalHtml = `
+            <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="deleteUserLabel">
+                                <i class="fas fa-trash me-2"></i>Confirmar Eliminación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-warning mb-3" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>¡Advertencia!</strong> Esta acción es irreversible.
+                            </div>
+                            <p>¿Estás seguro de que deseas eliminar al usuario <strong>${userNick}</strong>?</p>
+                            <p class="text-muted"><small>Una vez eliminado, no se puede recuperar.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" onclick="UsersComponent.deleteUserConfirmed(${userId})">
+                                <i class="fas fa-trash me-2"></i>Sí, eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Remover modal anterior si existe
+        const existingModal = document.getElementById('deleteUserModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Agregar nuevo modal
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        // Mostrar modal
+        const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+        modal.show();
+    }
+
+    /**
+     * Ejecuta la eliminación del usuario confirmada
+     */
+    static async deleteUserConfirmed(userId) {
+        try {
+            const deleteBtn = document.querySelector('.btn-danger[onclick*="deleteUserConfirmed"]');
+            if (deleteBtn) {
+                deleteBtn.disabled = true;
+                deleteBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Eliminando...';
+            }
+
+            console.log('🗑️ Eliminando usuario ID:', userId);
+            const response = await UserService.deleteUser(userId);
+
+            if (response.success) {
+                console.log('✅ Usuario eliminado exitosamente');
+
+                // Cerrar modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+                if (modal) {
+                    modal.hide();
+                }
+
+                // Mostrar notificación de éxito
+                this.showSuccessNotification('Usuario eliminado exitosamente');
+
+                // Recargar lista de usuarios de forma más simple
+                console.log('🔄 Recargando lista de usuarios...');
+                setTimeout(async () => {
+                    try {
+                        // Acceder a la instancia global
+                        const instance = window.UsersComponentInstance;
+                        
+                        if (instance) {
+                            console.log('📥 Recargando desde instancia existente');
+                            // Resetear a primera página
+                            instance.currentPage = 0;
+                            await instance.loadUsers();
+                            instance.renderAdminView();
+                            instance.attachPaginationListeners();
+                        } else {
+                            console.warn('⚠️ Instancia no disponible, navegando a /users');
+                            // Si no hay instancia, navegar a /users para forzar recarga
+                            App.getInstance().navigateTo('/users');
+                        }
+                    } catch (error) {
+                        console.error('❌ Error al recargar:', error);
+                        // Fallback: Navegar a /users
+                        App.getInstance().navigateTo('/users');
+                    }
+                }, 800);
+
+            } else {
+                console.error('❌ Error al eliminar usuario:', response.message);
+                this.showErrorNotification(response.message || 'Error al eliminar usuario');
+                
+                // Habilitar botón nuevamente
+                if (deleteBtn) {
+                    deleteBtn.disabled = false;
+                    deleteBtn.innerHTML = '<i class="fas fa-trash me-2"></i>Sí, eliminar';
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error en eliminación:', error);
+            this.showErrorNotification('Error al eliminar usuario: ' + error.message);
+            
+            const deleteBtn = document.querySelector('.btn-danger[onclick*="deleteUserConfirmed"]');
+            if (deleteBtn) {
+                deleteBtn.disabled = false;
+                deleteBtn.innerHTML = '<i class="fas fa-trash me-2"></i>Sí, eliminar';
+            }
+        }
+    }
+
+    /**
+     * Muestra notificación de éxito
+     */
+    static showSuccessNotification(message) {
+        const alertHtml = `
+            <div class="alert alert-success alert-dismissible fade show position-fixed" role="alert" 
+                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Éxito!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+
+        // Auto-hide después de 3 segundos
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert-success.position-fixed');
+            alerts.forEach(alert => alert.remove());
+        }, 3000);
+    }
+
+    /**
+     * Muestra notificación de error
+     */
+    static showErrorNotification(message) {
+        const alertHtml = `
+            <div class="alert alert-danger alert-dismissible fade show position-fixed" role="alert" 
+                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <strong>Error!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+
+        // Auto-hide después de 5 segundos
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert-danger.position-fixed');
+            alerts.forEach(alert => alert.remove());
+        }, 5000);
     }
 
     // Métodos de paginación estáticos

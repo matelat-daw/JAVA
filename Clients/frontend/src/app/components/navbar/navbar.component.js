@@ -147,6 +147,12 @@ class NavbarComponent {
             logoutLink.addEventListener('click', (e) => this.handleLogout(e));
         }
 
+        // Evento para confirmar logout en el modal
+        const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+        if (confirmLogoutBtn) {
+            confirmLogoutBtn.addEventListener('click', () => this.confirmLogoutAction());
+        }
+
         // Cerrar dropdown al hacer click en un enlace (en mobile)
         const dropdownItems = document.querySelectorAll('.dropdown-item');
         dropdownItems.forEach(item => {
@@ -169,7 +175,7 @@ class NavbarComponent {
     }
 
     /**
-     * Maneja el logout del usuario
+     * Maneja el logout del usuario - Muestra el modal de confirmación
      * @param {Event} e - Evento del click
      */
     handleLogout(e) {
@@ -181,32 +187,49 @@ class NavbarComponent {
             return;
         }
 
-        if (confirm('¿Are you sure you want to logout?')) {
-            AuthService.logout();
-            
-            // Limpiar instancias de componentes
-            const app = App.getInstance();
-            if (app && typeof app.clearComponentInstances === 'function') {
-                app.clearComponentInstances();
-            }
-            
-            Utils.showMessage(
-                'Logged Out',
-                'You have been successfully logged out.',
-                'success'
-            );
-
-            // Limpiar navbar
-            const container = document.querySelector(this.selector);
-            if (container) {
-                container.innerHTML = '';
-            }
-
-            // Redirigir a home
-            setTimeout(() => {
-                App.getInstance().navigateTo('/');
-            }, 300);
+        // Mostrar modal de confirmación
+        const logoutModal = document.getElementById('logoutConfirmModal');
+        if (logoutModal) {
+            const modal = new bootstrap.Modal(logoutModal);
+            modal.show();
         }
+    }
+
+    /**
+     * Realiza el logout después de confirmar en el modal
+     */
+    confirmLogoutAction() {
+        AuthService.logout();
+        
+        // Limpiar instancias de componentes
+        const app = App.getInstance();
+        if (app && typeof app.clearComponentInstances === 'function') {
+            app.clearComponentInstances();
+        }
+        
+        Utils.showMessage(
+            'Logged Out',
+            'You have been successfully logged out.',
+            'success'
+        );
+
+        // Limpiar navbar
+        const container = document.querySelector(this.selector);
+        if (container) {
+            container.innerHTML = '';
+        }
+
+        // Ocultar modal
+        const logoutModal = document.getElementById('logoutConfirmModal');
+        if (logoutModal) {
+            const modal = bootstrap.Modal.getInstance(logoutModal);
+            if (modal) modal.hide();
+        }
+
+        // Redirigir a home
+        setTimeout(() => {
+            App.getInstance().navigateTo('/');
+        }, 300);
     }
 
     /**
