@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MyIkeaApplication<MyIkea>",
+            "request": "launch",
+            "cwd": "${workspaceFolder:MyIkea}",
+            "mainClass": "com.futureprograms.MyIkea.MyIkeaApplication",
+            "projectName": "MyIkea",
+            "args": "",
+            "envFile": "${workspaceFolder:MyIkea}/.env"
+        }
+    ]
+}

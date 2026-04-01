@@ -1,0 +1,99 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5 px-3">
+    <div class="w-100" style="max-width: 450px;">
+        <div class="card border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="card-header text-white bg-dark py-4 border-0 text-center">
+                <i class="fas fa-users-cog fa-3x mb-3 text-primary"></i>
+                <h3 class="mb-0 fw-bold">Sign <span class="text-primary">In</span></h3>
+                <p class="text-muted small mb-0 mt-2">Access your management panel</p>
+            </div>
+            <div class="card-body p-5">
+                <form id="loginForm" class="needs-validation">
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="emailInput" class="form-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="emailInput" 
+                            name="email"
+                            placeholder="your.email@example.com"
+                            autocomplete="email"
+                            required>
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="passwordInput" class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            id="passwordInput" 
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+                        <div class="invalid-feedback">
+                            Password is required.
+                        </div>
+                    </div>
+
+                    <!-- Remember me -->
+                    <div class="mb-3 form-check">
+                        <input 
+                            type="checkbox" 
+                            class="form-check-input" 
+                            id="rememberMeCheckbox"
+                            name="rememberMe">
+                        <label class="form-check-label" for="rememberMeCheckbox">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2 mb-3">
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary btn-lg"
+                            id="loginBtn">
+                            <i class="fas fa-lock-open"></i> Sign In
+                        </button>
+                    </div>
+
+                    <!-- Loading spinner (hidden by default) -->
+                    <div class="text-center" id="loadingSpinner" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Signing in...</p>
+                    </div>
+
+                    <!-- Link to register -->
+                    <hr>
+                    <div class="text-center">
+                        <p class="text-muted">
+                            Don't have an account yet?
+                            <a href="/register" class="text-decoration-none">
+                                Create one now
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Help text -->
+        <div class=\"mt-4 text-center text-muted\">
+            <small>
+                <i class=\"fas fa-info-circle\"></i> 
+                Secure login with JWT authentication
+            </small>
+        </div>
+    </div>
+</div>

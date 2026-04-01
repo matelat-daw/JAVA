@@ -1,0 +1,55 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-4 mb-6" style="margin-bottom: 8rem;">
+            <h2>Carrito de Compras</h2>
+
+            <!-- Error message if present -->
+            <div th:if="${error}" class="alert alert-warning" th:text="${error}"></div>
+
+            <!-- Show products if they exist -->
+            <table class="table table-striped mt-3" th:if="${cart != null and cart.products != null and cart.products.size() > 0}">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${cart.products}" th:if="${product != null}">
+                    <td th:text="${product.productName}"></td>
+                    <td th:text="${product.productPrice}"></td>
+                    <td>1</td>
+                    <td>
+                        <a th:href="@{/cart/remove/{id}(id=${product.productId})}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${cart == null or cart.products == null or cart.products.isEmpty()}">
+                <p class="text-muted">Tu Carrito Está Vacío.</p>
+            </div>
+
+            <div th:if="${cart != null and cart.products != null and !cart.products.isEmpty()}">
+                <div class="d-flex justify-content-between mt-4">
+                    <h3>Total: </h3>
+                    <h3 th:text="${cart.totalPrice}">0</h3>
+                </div>
+            </div>
+
+            <!-- ✅ Checkout button only appears when there are items -->
+            <div class="d-flex mt-3" th:if="${cart != null and cart.products != null and !cart.products.isEmpty()}">
+                <a href="/products" class="btn btn-primary">Seguir Comprando</a>
+                <a href="/orders/complete" class="btn btn-success ms-3">Terminar Pedido</a>
+            </div>
+
+            <!-- ✅ Show only "Continue Shopping" button when cart is empty -->
+            <div class="d-flex mt-3" th:if="${cart == null or cart.products == null or cart.products.isEmpty()}">
+                <a href="/products" class="btn btn-primary">Seguir Comprando</a>
+            </div>
+        </div>
+    </div>
+</div>

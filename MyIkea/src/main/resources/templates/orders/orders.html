@@ -1,0 +1,39 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-5 mb-6" style="margin-bottom: 8rem;">
+            <h1>Lista de Pedidos</h1>
+            <div th:if="${orders == null or orders.isEmpty()}">
+                <div class="alert alert-warning" role="alert">
+                    No tienes pedidos completados.
+                </div>
+            </div>
+            <table class="table table-striped mt-3" th:if="${orders != null and orders.size() > 0}">
+                <thead>
+                <tr>
+                    <th scope="col">Fecha del Pedido</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Productos</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${order.totalPrice}"></td>
+                    <td>
+                        <ul>
+                            <li th:each="product : ${order.products}" th:text="${product.productName}"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a th:href="@{/orders/details/{id}(id=${order.orderId})}" class="btn btn-info">Detalles del Pedido</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a href="/products" class="btn btn-primary mt-3">Seguir Comprando</a>
+        </div>
+    </div>
+</div>

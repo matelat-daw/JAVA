@@ -1,0 +1,56 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-5 mb-6" style="margin-bottom: 8rem;">
+            <h1 class="text-center mb-4">Crear Nuevo Producto</h1>
+            
+            <!-- Mostrar mensaje de error si existe -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>❌ Error</strong>
+                <p class="mb-0" th:text="${error}"></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <form th:action="@{/products/create}" th:object="${producto}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="productoName" class="form-label">Nombre del Producto</label>
+                    <input type="text" class="form-control" id="productoName" th:field="*{productName}" placeholder="Ingrese el Nombre del Producto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="productoPrice" class="form-label">Precio del Producto</label>
+                    <input type="number" step="0.01" class="form-control" id="productoPrice" th:field="*{productPrice}" placeholder="Ingrese el Precio del Producto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="productoStock" class="form-label">Stock del Producto</label>
+                    <input type="number" class="form-control" id="productoStock" th:field="*{productStock}" placeholder="Ingrese el Stock" required>
+                </div>
+                <div class="mb-3">
+                    <label for="productoPictureFile" class="form-label">Imagen del Producto</label>
+                    <input type="file" class="form-control" id="productoPictureFile" th:field="*{productPictureFile}" accept="image/jpg, image/jpeg, image/png, image/gif, image/webp">
+                    <small class="form-text text-muted">Formatos aceptados: JPG, PNG, GIF, WebP. Tamaño máximo: 5MB</small>
+                </div>
+                <div class="mb-3">
+                    <label for="provincia" class="form-label">Provincia</label>
+                    <select class="form-select" id="provincia" th:field="*{municipality.province}" onchange="updateMunicipios()" required>
+                        <option value="" disabled selected>Selecciona una Provincia</option>
+                        <option th:each="provincia : ${provincias}" th:value="${provincia.provinceId}" th:text="${provincia.name}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="municipio" class="form-label">Municipio</label>
+                    <select class="form-select" id="municipio" th:field="*{municipality}" required>
+                        <option value="" disabled selected>Selecciona un Municipio</option>
+                        <option th:each="municipio : ${municipios}" th:value="${municipio.municipalityId}" th:text="${municipio.name}" th:data-provincia="${municipio.province.provinceId}"></option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between mt-5">
+                    <a href="/products" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </form>
+            
+            <!-- Script para filtrar municipios -->
+            <th:block th:insert="~{fragments/municipios-filter::municipiosFilter}"></th:block>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-5 mb-6" style="margin-bottom: 8rem;">
+            <h1 class="text-center mb-4">Detalles del Pedido</h1>
+            
+            <!-- Validate that order exists -->
+            <th:block th:if="${order}">
+                <div th:if="${param.pago}" class="alert alert-success" role="alert">
+                    Pago simulado completado. No se realizaron cambios en la base de datos.
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Order ID: <span th:text="${order.orderId}"></span></h5>
+                        <p class="card-text">
+                            <strong>Fecha del Pedido:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></span><br>
+                            <strong>Total:</strong> $<span th:text="${order.totalPrice}"></span><br>
+                            <strong>Completado:</strong> <span th:text="${order.completed ? 'Sí' : 'No'}"></span>
+                        </p>
+                    </div>
+                </div>
+                <h4 class="mb-3">Productos del Pedido</h4>
+                <div class="list-group">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between" th:each="product : ${order.products}">
+                            <span th:text="${product.productName}"></span>
+                            <span>$<span th:text="${product.productPrice}"></span></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Back Button -->
+                <div class="mt-4 text-center d-flex justify-content-center gap-2">
+                    <a th:href="@{/orders/details/{id}/pay(id=${order.orderId})}" class="btn btn-success">Terminar y Pagar (simulado)</a>
+                    <a href="/orders" class="btn btn-secondary">Volver a la Lista de Pedidos</a>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>

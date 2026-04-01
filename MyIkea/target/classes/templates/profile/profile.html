@@ -1,0 +1,349 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container py-5 mb-6" style="margin-bottom: 8rem;">
+            <!-- Título -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h1 class="display-4 fw-bold mb-2">
+                        <i class="fas fa-user-circle me-3"></i>Mi Perfil
+                    </h1>
+                    <p class="text-muted">Gestiona tu información personal</p>
+                </div>
+            </div>
+
+            <!-- Mensajes -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${success}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Validar que usuario existe -->
+            <th:block th:if="${user}">
+            <!-- Contenido principal -->
+            <div class="row gap-4">
+                <!-- Panel lateral -->
+                <div class="col-lg-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <!-- Foto -->
+                            <div class="mb-4">
+                                <img th:if="${user.profilePicture}" 
+                                     th:src="${user.profilePicture?.startsWith('/') ? user.profilePicture : '/images/' + user.profilePicture}"
+                                     alt="Foto"
+                                     class="rounded-circle img-fluid"
+                                     style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #e9ecef;">
+                                <img th:unless="${user.profilePicture}"
+                                     src="https://via.placeholder.com/150?text=Sin+Foto"
+                                     alt="Sin foto"
+                                     class="rounded-circle img-fluid"
+                                     style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #e9ecef;">
+                            </div>
+                            
+                            <h5 th:text="${user.username}"></h5>
+                            <p class="text-muted small mb-3" th:text="${user.email}"></p>
+
+                            <!-- Foto Upload -->
+                            <form method="post" action="/profile/update-picture" enctype="multipart/form-data" class="mb-3">
+                                <input type="hidden" name="_csrf" th:value="${_csrf?.token}">
+                                <input type="file" id="picInput" name="profilePicture" accept="image/*" class="d-none">
+                                <button type="button" class="btn btn-outline-primary btn-sm w-100" 
+                                        onclick="document.getElementById('picInput').click()">
+                                    <i class="fas fa-camera me-2"></i>Cambiar foto
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-sm w-100 mt-2 d-none" id="submitBtn">
+                                    <i class="fas fa-upload me-2"></i>Subir
+                                </button>
+                            </form>
+
+                            <div th:if="${pictureSuccess}" class="alert alert-success alert-sm py-2">
+                                <small th:text="${pictureSuccess}"></small>
+                            </div>
+                            <div th:if="${pictureError}" class="alert alert-danger alert-sm py-2">
+                                <small th:text="${pictureError}"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel principal -->
+                <div class="col-lg-9">
+                    <!-- Datos personales -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-edit me-2 text-primary"></i>Datos Personales
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="post" action="/profile/update">
+                                <input type="hidden" name="_csrf" th:value="${_csrf?.token}">
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Nombre</label>
+                                        <input type="text" class="form-control" name="firstName" th:value="${user.firstName}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Apellido</label>
+                                        <input type="text" class="form-control" name="lastName" th:value="${user.lastName}">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Email</label>
+                                        <input type="email" class="form-control" name="email" th:value="${user.email}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Teléfono</label>
+                                        <input type="tel" class="form-control" name="phoneNumber" th:value="${user.phoneNumber}">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Guardar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Cambiar contraseña -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-lock me-2 text-primary"></i>Cambiar Contraseña
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div th:if="${passwordSuccess}" class="alert alert-success alert-dismissible">
+                                <span th:text="${passwordSuccess}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            <div th:if="${passwordError}" class="alert alert-danger alert-dismissible">
+                                <span th:text="${passwordError}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+
+                            <form method="post" action="/profile/update-password">
+                                <input type="hidden" name="_csrf" th:value="${_csrf?.token}">
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Contraseña actual</label>
+                                    <input type="password" class="form-control" name="currentPassword" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Nueva contraseña</label>
+                                        <input type="password" class="form-control" name="newPassword" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Confirmar</label>
+                                        <input type="password" class="form-control" name="confirmPassword" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-key me-2"></i>Cambiar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Eliminar cuenta -->
+                    <div class="card shadow-sm border-danger">
+                        <div class="card-header bg-danger bg-opacity-10 border-danger py-3">
+                            <h5 class="mb-0 fw-bold text-danger">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar Cuenta
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-3">Esta acción es permanente y no se puede deshacer.</p>
+                            <div th:if="${deleteError}" class="alert alert-danger alert-dismissible">
+                                <span th:text="${deleteError}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar mi cuenta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </th:block>
+
+            <!-- Modal eliminar -->
+            <div class="modal fade" id="deleteModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">Confirmar eliminación</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-3"><strong>¿Eliminar tu cuenta?</strong></p>
+                            <ul class="mb-4">
+                                <li>Tu perfil será eliminado permanentemente</li>
+                                <li>No podrás recuperar tu cuenta</li>
+                            </ul>
+                            <form id="deleteForm" method="post" action="/profile/delete">
+                                <input type="hidden" name="_csrf" th:value="${_csrf?.token}">
+                                <label class="form-label">Ingresa tu contraseña:</label>
+                                <input type="password" id="delPassword" name="password" class="form-control" required>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                                Sí, eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de despedida -->
+            <div class="modal fade" id="goodbyeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-center">
+                        <div class="modal-body p-5">
+                            <div style="font-size: 60px; margin-bottom: 20px;">👋</div>
+                            <h4 class="mb-3 fw-bold">¡Hasta pronto!</h4>
+                            <p class="text-muted mb-4">
+                                Tu cuenta ha sido eliminada correctamente.<br>
+                                <strong>Todos tus datos han sido borrados permanentemente.</strong>
+                            </p>
+                            <p class="small text-muted mb-4">
+                                Gracias por usar MyIkea. Esperamos verte de nuevo en el futuro.
+                            </p>
+                            <a href="/login" class="btn btn-primary">
+                        Ir a Iniciar Sesión
+                    </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Contraseña vacía -->
+            <div class="modal fade" id="emptyPasswordModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning bg-opacity-10 border-warning">
+                            <h5 class="modal-title fw-bold text-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Campo requerido
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Por favor ingresa tu contraseña para confirmar la eliminación.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Confirmación adicional -->
+            <div class="modal fade" id="confirmationModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>Última confirmación
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0"><strong>⚠️ Esta acción es irreversible</strong></p>
+                            <p class="mt-3 text-danger">
+                                ¿Estás completamente seguro de que deseas eliminar tu cuenta y todos tus datos permanentemente?
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteFinalBtn">
+                                <i class="fas fa-trash-alt me-2"></i>Sí, eliminar permanentemente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Error de credenciales -->
+            <div class="modal fade" id="credentialsErrorModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">
+                                <i class="fas fa-times-circle me-2"></i>Contraseña incorrecta
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">La contraseña que ingresaste es incorrecta. Por favor verifica e intenta de nuevo.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Error de respuesta inválida -->
+            <div class="modal fade" id="invalidResponseModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">
+                                <i class="fas fa-server me-2"></i>Error del servidor
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">La respuesta del servidor no es válida. Por favor intenta de nuevo más tarde.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Error de conexión -->
+            <div class="modal fade" id="connectionErrorModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">
+                                <i class="fas fa-wifi-off me-2"></i>Error de conexión
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-1">Hubo un problema al conectar con el servidor.</p>
+                            <p class="text-muted small mb-0" id="connectionErrorDetails"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Script para subida de foto de perfil -->
+            <th:block th:insert="~{fragments/profile-picture-upload::profilePictureUpload}"></th:block>
+
+            <!-- Script para manejo del modal de eliminación de cuenta -->
+            <script src="/js/delete-account-modal.js"></script>
+        </div>
+    </div>
+</div>

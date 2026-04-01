@@ -1,0 +1,84 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container-sm mb-6" style="margin-top: 50px; margin-bottom: 8rem;">
+            <!-- Modal: Error de autenticación -->
+            <div class="modal fade" id="authErrorModal" tabindex="-1" th:if="${param.error != null}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                            <h5 class="modal-title fw-bold text-danger">
+                                <i class="fas fa-times-circle me-2"></i>Error de Autenticación
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Email o contraseña incorrectos. Por favor, intenta nuevamente.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Logout exitoso -->
+            <div class="modal fade" id="logoutSuccessModal" tabindex="-1" th:if="${param.logout != null}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success bg-opacity-10 border-success">
+                            <h5 class="modal-title fw-bold text-success">
+                                <i class="fas fa-check-circle me-2"></i>Sesión cerrada
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Has cerrado sesión correctamente. ¡Hasta pronto!</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Contraseñas no coinciden -->
+            <div class="modal fade" id="passwordMismatchModal" tabindex="-1" th:if="${param.passwordMismatch != null}">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning bg-opacity-10 border-warning">
+                            <h5 class="modal-title fw-bold text-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Contraseñas no coinciden
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">Las contraseñas ingresadas no son iguales. Por favor, intenta de nuevo.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Entendido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form th:action="@{/login}" method="post" id="loginForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="username" name="username" placeholder="Introduce tu correo" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" required>
+                </div>
+                <div class="d-flex justify-content-start gap-2">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                    <a href="/register" class="btn btn-success">Regístrate</a>
+                </div>
+            </form>
+
+            <!-- Script para modales de autenticación -->
+            <script src="/js/auth-modals.js"></script>
+        </div>
+    </div>
+</div>

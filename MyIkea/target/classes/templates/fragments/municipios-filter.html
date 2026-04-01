@@ -1,0 +1,17 @@
+<!-- Fragment: Script para filtrar municipios por provincia -->
+<script th:fragment="municipiosFilter" xmlns:th="http://www.thymeleaf.org">
+    function updateMunicipios() {
+        const provinciaId = document.getElementById('provincia').value;
+        const municipios = document.querySelectorAll('#municipio option');
+
+        municipios.forEach(municipio => {
+            if (municipio.getAttribute('data-provincia') === provinciaId || provinciaId === "") {
+                municipio.style.display = "block";
+            } else {
+                municipio.style.display = "none";
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateMunicipios);
+</script>

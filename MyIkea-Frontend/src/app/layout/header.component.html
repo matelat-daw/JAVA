@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg bg-white shadow-sm border-bottom">
+  <div class="container-lg">
+    <a class="navbar-brand fw-bold" href="#" id="nav-brand-home">MyIkea</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul id="nav-links" class="navbar-nav me-auto d-none">
+        <li class="nav-item"><a class="nav-link" href="#" data-view="catalog">Catalogo</a></li>
+        <li class="nav-item d-none" id="nav-item-cart"><a class="nav-link" href="#" data-view="cart">Carrito</a></li>
+        <li class="nav-item d-none" id="nav-item-orders"><a class="nav-link" href="#" data-view="orders">Pedidos</a></li>
+        <li class="nav-item d-none" id="nav-item-users"><a class="nav-link" href="#" data-view="users">Usuarios</a></li>
+      </ul>
+
+      <div id="nav-auth" class="d-flex gap-2 ms-auto">
+        <button id="btn-open-login" class="btn btn-outline-primary btn-sm">Login</button>
+        <button id="btn-open-register" class="btn btn-primary btn-sm">Registrarse</button>
+      </div>
+
+      <div id="nav-user" class="d-none ms-auto d-flex align-items-center gap-3">
+        <span id="nav-user-name" class="small text-secondary"></span>
+        <a href="#" class="small" id="nav-link-profile">Perfil</a>
+        <button id="btn-logout" class="btn btn-outline-danger btn-sm">Salir</button>
+      </div>
+    </div>
+  </div>
+</nav>

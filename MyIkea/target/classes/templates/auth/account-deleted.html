@@ -1,0 +1,60 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container-message mx-auto" style="max-width: 500px; width: 100%; padding: 20px;">
+            <style>
+                .card-deleted {
+                    border: none;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                    overflow: hidden;
+                }
+
+                .card-header-deleted {
+                    background: linear-gradient(135deg, #da4d4d 0%, #c43a3a 100%);
+                    border: none;
+                    color: white;
+                    text-align: center;
+                    padding: 40px 20px 20px;
+                }
+
+                .icon-container-deleted {
+                    font-size: 60px;
+                    margin-bottom: 15px;
+                }
+
+                .card-body-deleted {
+                    padding: 40px 30px;
+                    text-align: center;
+                    background: #f8f9fa;
+                }
+            </style>
+            <div class="card card-deleted">
+                <div class="card-header card-header-deleted">
+                    <div class="icon-container-deleted">👋</div>
+                    <h2 class="card-title">Cuenta Eliminada</h2>
+                </div>
+                <div class="card-body card-body-deleted">
+                    <p class="message-text">Lamentamos que te vayas. Tu cuenta y todos tus datos personales han sido eliminados permanentemente de nuestro sistema de acuerdo con nuestra política de privacidad.</p>
+                    
+                    <div class="info-box" style="background: white; border-left: 4px solid #da4d4d; padding: 15px; border-radius: 5px; margin-bottom: 30px; text-align: left; font-size: 14px; color: #666;">
+                        <strong>¿Qué ha pasado?</strong>
+                        <ul>
+                            <li>Tu perfil de usuario ya no existe</li>
+                            <li>Tus datos personales han sido borrados</li>
+                            <li>Tu historial de compras se ha anonimizado</li>
+                            <li>Se ha cerrado tu sesión automáticamente</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-muted small mb-4">Gracias por el tiempo que pasaste con nosotros. Esperamos volver a verte pronto en MyIkea.</p>
+
+                    <div class="action-buttons d-flex gap-2">
+                        <a href="/login" class="btn btn-primary flex-grow-1">Volver a Iniciar Sesión</a>
+                        <a href="/register" class="btn btn-outline-secondary flex-grow-1">Crear Nueva Cuenta</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

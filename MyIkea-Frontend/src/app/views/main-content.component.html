@@ -1,0 +1,141 @@
+<main class="container-lg py-4 flex-grow-1">
+  <section id="view-welcome" class="p-4 rounded-4 border bg-body-tertiary">
+    <p class="text-uppercase fw-bold text-secondary small mb-2">Pantalla de bienvenida</p>
+    <h1 class="display-6 fw-bold">Bienvenido a MyIkea</h1>
+    <p class="lead mb-0">Para acceder al catalogo y funcionalidades, inicia sesion o registrate.</p>
+  </section>
+
+  <section id="view-app" class="d-none d-grid gap-3">
+    <section id="section-catalog" class="card shadow-sm p-3 app-view" data-view="catalog">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Catalogo</h2>
+        <div class="d-flex gap-2">
+          <button id="btn-open-create-product" class="btn btn-primary btn-sm d-none">Agregar articulo</button>
+          <button id="btn-reload-catalog" class="btn btn-outline-secondary btn-sm">Recargar catalogo</button>
+        </div>
+      </div>
+      <div id="products-grid" class="row g-3"></div>
+    </section>
+
+    <section id="section-cart" class="card shadow-sm p-3 app-view d-none" data-view="cart">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Carrito</h2>
+        <div class="d-flex gap-2">
+          <button id="btn-reload-cart" class="btn btn-outline-secondary btn-sm">Refrescar carrito</button>
+          <button id="btn-complete-order" class="btn btn-success btn-sm d-none">Finalizar pedido</button>
+        </div>
+      </div>
+      <div id="cart-content"></div>
+      <div class="d-flex mt-3 gap-2">
+        <button id="btn-go-catalog-from-cart" class="btn btn-primary btn-sm">Agregar al carrito</button>
+      </div>
+    </section>
+
+    <section id="section-orders" class="card shadow-sm p-3 app-view d-none" data-view="orders">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Pedidos</h2>
+        <button id="btn-reload-orders" class="btn btn-outline-secondary btn-sm">Recargar pedidos</button>
+      </div>
+      <div id="orders-content"></div>
+    </section>
+
+    <section id="section-users" class="card shadow-sm p-3 app-view d-none" data-view="users">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Usuarios</h2>
+        <button id="btn-reload-users" class="btn btn-outline-secondary btn-sm">Recargar usuarios</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Roles</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="section-profile" class="app-view d-none" data-view="profile">
+      <div class="card shadow-sm p-3 mb-3">
+        <h2 class="h4 mb-3">Mi perfil</h2>
+        <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+          <img id="profile-picture-preview" class="rounded-circle border border-3 border-secondary-subtle bg-white object-fit-cover flex-shrink-0" width="110" height="110" alt="Foto de perfil" />
+          <form id="profile-picture-form" class="d-flex flex-column flex-sm-row gap-2 align-items-sm-center">
+            <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="form-control form-control-sm" required />
+            <button type="submit" class="btn btn-outline-primary btn-sm">Cambiar imagen</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card shadow-sm p-3 mb-3">
+        <h3 class="h5 mb-3">Datos personales</h3>
+        <form id="profile-form" class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Username</label>
+            <input name="username" class="form-control" disabled />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input name="email" class="form-control" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input name="firstName" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Apellidos</label>
+            <input name="lastName" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Telefono</label>
+            <input name="phoneNumber" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Genero</label>
+            <select name="gender" class="form-select">
+              <option value="female">Mujer</option>
+              <option value="male">Varon</option>
+              <option value="other">Otro</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-sm">Guardar perfil</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card shadow-sm p-3 mb-3">
+        <h3 class="h5 mb-3">Cambiar contrasena</h3>
+        <form id="profile-password-form" class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Contrasena actual</label>
+            <input name="currentPassword" type="password" class="form-control" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nueva contrasena</label>
+            <input name="newPassword" type="password" class="form-control" minlength="6" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Confirmar nueva contrasena</label>
+            <input name="confirmPassword" type="password" class="form-control" minlength="6" required />
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-sm">Actualizar contrasena</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card shadow-sm p-3 border border-danger-subtle bg-danger-subtle bg-opacity-10">
+        <h3 class="h5 mb-2 text-danger">Eliminar cuenta</h3>
+        <p class="mb-3 text-danger-emphasis">Esta accion es permanente y no se puede deshacer.</p>
+        <button type="button" id="btn-open-delete-profile" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProfileModal">
+          Eliminar mi perfil
+        </button>
+      </div>
+    </section>
+  </section>
+</main>

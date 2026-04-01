@@ -1,0 +1,37 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-4 mb-6" style="margin-bottom: 8rem;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Nuestros Muebles</h1>
+                <a href="/products/create" class="btn btn-primary" th:if="${CAN_CREATE}">Nuevo Producto</a>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12" th:each="producto : ${productos}">
+                    <div class="card">
+                        <img th:src="@{'/images/' + ${producto.productPicture}}" 
+                             th:onerror="this.src='/images/default.jpg'"
+                             th:alt="${producto.productPicture}" class="card-img-top"
+                             style="height: 200px; width: 100%; object-fit: contain;"
+                             onerror="this.onerror=null; this.src='/images/default.jpg';">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${producto.productName}"></h5>
+                            <p class="card-text" th:text="'$' + ${producto.productPrice}"></p>
+                            <p class="card-text" th:text="'Stock: ' + ${producto.productStock}"></p>
+                            <p class="card-text" th:text="'Municipio: ' + ${producto.municipality.name}"></p>
+                            <p class="card-text" th:text="'Provincia: ' + ${producto.municipality.province.name}"></p>
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{'/products/details/' + ${producto.productId}}"
+                                   class="btn btn-success btn-sm">Detalles</a>
+                                <a th:href="@{/cart/add/{id}(id=${producto.productId})}"
+                                   class="btn btn-primary btn-sm"
+                                   th:if="${ADMIN ?: false}"
+                                   th:classappend="${producto.productStock == 0} ? 'disabled'">Comprar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

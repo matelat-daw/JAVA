@@ -1,0 +1,174 @@
+<div class="min-h-100" style="background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);">
+    <!-- Welcome Header -->
+    <div class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <img 
+                        id="profilePictureImg" 
+                        src="" 
+                        alt="Profile Picture" 
+                        class="rounded-circle border border-2 border-white" style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
+                <div class="col-md-9">
+                    <h1 class="display-6 fw-bold mb-2">
+                        <i class="fas fa-wave-hand"></i> Welcome back!
+                    </h1>
+                    <p class="h5 fw-normal mb-3" id="userNameDisplay"></p>
+                    <p class="lead mb-3">
+                        You are successfully logged in. Here you can manage your account and access all features.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="/profile" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </a>
+                        <a href="/profile" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-key"></i> Change Password
+                        </a>
+                        <a href="/profile" class="btn btn-sm btn-outline-danger" title="Delete your account permanently">
+                            <i class="fas fa-trash-alt"></i> Delete Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <!-- User Info Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 rounded-3 shadow-sm h-100">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-user-circle"></i> My Information
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <small class="text-muted fw-bold">Nickname:</small>
+                            <p class="mb-0" id="nickDisplay"></p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted fw-bold">Email:</small>
+                            <p class="mb-0" id="emailDisplay"></p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted fw-bold">Full Name:</small>
+                            <p class="mb-0" id="fullNameDisplay"></p>
+                        </div>
+                        <div class="mb-0">
+                            <small class="text-muted fw-bold">Role:</small>
+                            <p class="mb-0">
+                                <span class="badge bg-info" id="roleDisplay"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 rounded-3 shadow-sm h-100">
+                            <div class="card-body d-flex gap-3">
+                                <div class="flex-shrink-0" style="width: 60px; height: 60px;" class="bg-info-subtle text-info rounded-2 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-calendar-check fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Account Status</h6>
+                                    <p class="h5 fw-bold mb-1">Active</p>
+                                    <small class="text-muted">Your account is active</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 rounded-3 shadow-sm h-100">
+                            <div class="card-body d-flex gap-3">
+                                <div class="flex-shrink-0" style="width: 60px; height: 60px;" class="bg-success-subtle text-success rounded-2 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-shield-alt fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Security</h6>
+                                    <p class="h5 fw-bold mb-1">Secure</p>
+                                    <small class="text-muted">JWT authenticated session</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 rounded-3 shadow-sm h-100">
+                            <div class="card-body d-flex gap-3">
+                                <div class="flex-shrink-0" style="width: 60px; height: 60px;" class="bg-info-subtle text-info rounded-2 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-laptop fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Last Login</h6>
+                                    <p class="h5 fw-bold mb-1">Now</p>
+                                    <small class="text-muted">Just now</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-0 rounded-3 shadow-sm h-100">
+                            <div class="card-body d-flex gap-3">
+                                <div class="flex-shrink-0" style="width: 60px; height: 60px;" class="bg-warning-subtle text-warning rounded-2 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-cog fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Features</h6>
+                                    <p class="h5 fw-bold mb-1">Available</p>
+                                    <small class="text-muted">All features enabled</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 rounded-3 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <i class="fas fa-link"></i> Quick Links
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <a href="/users" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2">
+                                    <i class="fas fa-users fs-5"></i>
+                                    <span>Users List</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2 border-0" style="cursor: not-allowed;" disabled>
+                                    <i class="fas fa-file-download fs-5"></i>
+                                    <span>Download Data</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2 border-0" style="cursor: not-allowed;" disabled>
+                                    <i class="fas fa-headset fs-5"></i>
+                                    <span>Support</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-danger w-100 py-3 d-flex flex-column align-items-center gap-2" id="logoutBtn" style="border: 0;">
+                                    <i class="fas fa-sign-out-alt fs-5"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

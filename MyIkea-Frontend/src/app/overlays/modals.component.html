@@ -1,0 +1,163 @@
+<div class="modal fade" id="productDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="product-details-title">Detalles del articulo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-center mb-3">
+          <img id="product-details-image" alt="Imagen del articulo" class="img-fluid rounded border bg-body-tertiary p-2 w-100 object-fit-contain" />
+        </div>
+        <p class="mb-2"><strong>Precio:</strong> <span id="product-details-price">-</span></p>
+        <p class="mb-2"><strong>Stock:</strong> <span id="product-details-stock">-</span></p>
+        <p class="mb-0"><strong>ID:</strong> <span id="product-details-id">-</span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar articulo al catalogo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="create-product-form">
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              <input name="name" class="form-control" required maxlength="512" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Precio</label>
+              <input name="price" type="number" min="0" step="0.01" class="form-control" required />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Stock</label>
+              <input name="stock" type="number" min="0" step="1" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Imagen del producto</label>
+              <input name="productPictureFile" type="file" accept="image/jpg, image/jpeg, image/png, image/gif, image/webp" class="form-control" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Provincia</label>
+              <select id="create-product-province" name="provinceId" class="form-select" required>
+                <option value="">Selecciona una provincia</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Municipio</label>
+              <select id="create-product-municipality" name="municipalityId" class="form-select" required disabled>
+                <option value="">Selecciona un municipio</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar articulo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteProfileModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-danger-subtle bg-danger-subtle bg-opacity-10">
+        <h5 class="modal-title text-danger">Confirmar eliminacion de cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body d-grid gap-2">
+        <p class="mb-2">Ingresa tu contrasena para eliminar tu cuenta.</p>
+        <input id="delete-profile-password" type="password" class="form-control" placeholder="Contrasena" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete-profile">Si, eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Iniciar sesion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="login-form">
+        <div class="modal-body d-grid gap-3">
+          <div>
+            <label class="form-label">Usuario o email</label>
+            <input name="usernameOrEmail" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Contrasena</label>
+            <input name="password" type="password" class="form-control" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="register-form">
+        <div class="modal-body d-grid gap-3">
+          <div>
+            <label class="form-label">Username</label>
+            <input name="username" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Email</label>
+            <input name="email" type="email" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Contrasena</label>
+            <input name="password" type="password" minlength="8" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Repetir contrasena</label>
+            <input name="confirmPassword" type="password" minlength="8" class="form-control" required />
+          </div>
+          <div>
+            <label class="form-label">Genero</label>
+            <select name="gender" class="form-select">
+              <option value="female">Mujer</option>
+              <option value="male">Varon</option>
+              <option value="other">Otro</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Imagen de perfil (opcional)</label>
+            <input name="profilePicture" type="file" accept="image/*" class="form-control" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Crear cuenta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

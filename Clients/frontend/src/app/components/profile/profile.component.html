@@ -1,0 +1,303 @@
+<div class="spa-fragment profile-fragment">
+    <!-- Main Content -->
+    <div class="main-content py-5 mb-6" style="min-height: calc(100vh - 120px);">
+        <div class="container py-5">
+            <!-- Título -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h1 class="display-5 fw-bold mb-2">
+                        <i class="fas fa-user-circle me-3"></i>Mi Perfil
+                    </h1>
+                    <p class="text-muted">Gestiona tu información personal y seguridad</p>
+                </div>
+            </div>
+
+            <!-- Alertas de mensajes -->
+            <div id="successAlert" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="successMessage"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div id="errorAlert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="errorMessage"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="row gap-4">
+                <!-- Panel lateral - Foto de perfil -->
+                <div class="col-lg-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <!-- Foto -->
+                            <div class="mb-4">
+                                <img id="profilePicturePreview"
+                                     src="https://via.placeholder.com/150?text=Loading"
+                                     alt="Foto de perfil"
+                                     class="rounded-circle img-fluid"
+                                     style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #e9ecef;">
+                            </div>
+
+                            <h5 id="userNickDisplay" class="mb-2">Loading...</h5>
+                            <p class="text-muted small mb-3" id="userEmailDisplay">...</p>
+
+                            <!-- Formulario de cambio de foto -->
+                            <form id="pictureForm" class="mb-3">
+                                <input type="file" id="picInput" name="profilePicture" accept="image/*" class="d-none">
+                                <button type="button" class="btn btn-outline-primary btn-sm w-100"
+                                        onclick="document.getElementById('picInput').click()">
+                                    <i class="fas fa-camera me-2"></i>Cambiar foto
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-sm w-100 mt-2 d-none" id="submitPicBtn">
+                                    <i class="fas fa-upload me-2"></i>Subir
+                                </button>
+                            </form>
+
+                            <div id="pictureLoading" class="d-none">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Subiendo...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel principal -->
+                <div class="col-lg-9">
+                    <!-- Datos personales -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-edit me-2 text-primary"></i>Datos Personales
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="updateProfileForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Nombre</label>
+                                        <input type="text" id="nameInput" class="form-control" name="name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Primer Apellido</label>
+                                        <input type="text" id="surname1Input" class="form-control" name="surname1" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Segundo Apellido</label>
+                                        <input type="text" id="surname2Input" class="form-control" name="surname2">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Teléfono</label>
+                                        <input type="tel" id="phoneInput" class="form-control" name="phone" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Guardar cambios
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Cambiar contraseña -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light border-0 py-3">
+                            <h5 class="mb-0 fw-bold">
+                                <i class="fas fa-lock me-2 text-primary"></i>Cambiar Contraseña
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="updatePasswordForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Contraseña Actual</label>
+                                    <input type="password" id="currentPasswordInput" class="form-control" name="currentPassword" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Nueva Contraseña</label>
+                                        <input type="password" id="newPasswordInput" class="form-control" name="newPassword" required
+                                               minlength="6" placeholder="Mínimo 6 caracteres">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">Confirmar Contraseña</label>
+                                        <input type="password" id="confirmPasswordInput" class="form-control" name="confirmPassword" required
+                                               minlength="6" placeholder="Confirma tu contraseña">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-key me-2"></i>Cambiar contraseña
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Eliminar cuenta -->
+                    <div class="card shadow-sm border-danger">
+                        <div class="card-header bg-danger bg-opacity-10 border-danger py-3">
+                            <h5 class="mb-0 fw-bold text-danger">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar Cuenta
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-3">
+                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                Esta acción es permanente y no se puede deshacer.
+                            </p>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash-alt me-2"></i>Eliminar mi cuenta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar eliminación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>Confirmar eliminación
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3"><strong>¿Eliminar tu cuenta?</strong></p>
+                    <ul class="mb-4 ms-3">
+                        <li>Tu perfil será eliminado permanentemente</li>
+                        <li>No podrás recuperar tu cuenta</li>
+                        <li>Se eliminarán todos tus datos</li>
+                    </ul>
+                    <form id="deleteForm">
+                        <label class="form-label fw-semibold">Ingresa tu contraseña para confirmar:</label>
+                        <input type="password" id="delPassword" name="password" class="form-control" required>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                        <i class="fas fa-trash-alt me-2"></i>Sí, eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmación adicional -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>Última confirmación
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0"><strong>⚠️ Esta acción es irreversible</strong></p>
+                    <p class="mt-3 text-danger">
+                        ¿Estás completamente seguro de que deseas eliminar tu cuenta y todos tus datos permanentemente?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteFinalBtn">
+                        <i class="fas fa-trash-alt me-2"></i>Sí, eliminar permanentemente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Despedida -->
+    <div class="modal fade" id="goodbyeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-body p-5">
+                    <div style="font-size: 60px; margin-bottom: 20px;">👋</div>
+                    <h4 class="mb-3 fw-bold">¡Hasta pronto!</h4>
+                    <p class="text-muted mb-4">
+                        Tu cuenta ha sido eliminada correctamente.<br>
+                        <strong>Todos tus datos han sido borrados permanentemente.</strong>
+                    </p>
+                    <p class="small text-muted mb-4">
+                        Gracias por usar nuestro servicio. Esperamos verte de nuevo en el futuro.
+                    </p>
+                    <a href="/login" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>Ir a Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Contraseña vacía -->
+    <div class="modal fade" id="emptyPasswordModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning bg-opacity-10 border-warning">
+                    <h5 class="modal-title fw-bold text-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Campo requerido
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Por favor ingresa tu contraseña para confirmar la eliminación.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Error de contraseña -->
+    <div class="modal fade" id="credentialsErrorModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fas fa-times-circle me-2"></i>Contraseña incorrecta
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">La contraseña que ingresaste es incorrecta. Por favor verifica e intenta de nuevo.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Error de conexión -->
+    <div class="modal fade" id="connectionErrorModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger bg-opacity-10 border-danger">
+                    <h5 class="modal-title fw-bold text-danger">
+                        <i class="fas fa-wifi-off me-2"></i>Error de conexión
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-1">Hubo un problema al conectar con el servidor.</p>
+                    <p class="text-muted small mb-0" id="connectionErrorDetails"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

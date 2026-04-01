@@ -1,0 +1,75 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-5 mb-6" style="margin-bottom: 8rem;">
+            <!-- Error si producto no existe -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>❌ Error</strong>
+                <p class="mb-0" th:text="${error}"></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            <!-- Contenido si producto existe -->
+            <th:block th:if="${producto}">
+            <!-- Título de producto -->
+            <h1 th:text="${producto.productName}" class="text-center mb-4"></h1>
+
+            <div class="row">
+                <!-- Imagen del producto -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <img th:src="@{'/images/' + ${producto.productPicture}}"
+                             th:onerror="this.src='/images/default.jpg'"
+                             th:alt="${producto.productPicture}" class="img-fluid" style="height: 300px; object-fit: contain;"
+                             onerror="this.onerror=null; this.src='/images/default.jpg';">
+                    </div>
+                </div>
+
+                <!-- Detalles del producto -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalles del Producto</h5>
+
+                            <!-- Id -->
+                            <p class="card-text">
+                                <strong>Id:</strong><span th:text="${producto.productId}"></span>
+                            </p>
+
+                            <!-- Precio -->
+                            <p class="card-text">
+                                <strong>Precio:</strong> $<span th:text="${producto.productPrice}"></span>
+                            </p>
+
+                            <!-- Stock -->
+                            <p class="card-text">
+                                <strong>Stock:</strong> <span th:text="${producto.productStock}"></span> unidades disponibles
+                            </p>
+
+                            <!-- Municipio -->
+                            <p class="card-text">
+                                <strong>Municipio:</strong> <span th:text="${producto.municipality.name}"></span>
+                            </p>
+
+                            <!-- Provincia -->
+                            <p class="card-text">
+                                <strong>Provincia:</strong> <span th:text="${producto.municipality.province.name}"></span>
+                            </p>
+
+                            <!-- Botón para agregar al carrito -->
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/cart/add/{id}(id=${producto.productId})}" th:if="${producto.productStock > 0 and (ADMIN ?: false)}" class="btn btn-success">Agregar al Carrito</a>
+                                <a th:if="${producto.productStock == 0}" class="btn btn-secondary" disabled>Sin Stock</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </th:block>
+
+            <div class="mt-4">
+                <a href="/products" class="btn btn-primary">Volver a la lista de productos</a>
+            </div>
+        </div>
+    </div>
+</div>

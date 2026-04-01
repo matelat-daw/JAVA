@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients - Gestión de Clientes</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Base URL para rutas relativas en SPA -->
+    <base href="/">
+    
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="frontend/src/app/app.css">
+</head>
+<body>
+    <!-- Sistema de registro de scripts - DEBE SER PRIMERO -->
+    <script>
+        // Objeto global para rastrear cuándo cada script está listo
+        window.AppScripts = {
+            loaded: new Set(),
+            register(scriptName) {
+                this.loaded.add(scriptName);
+                console.log(`📦 ${scriptName} cargado (${this.loaded.size}/12)`);
+            },
+            isReady(scriptName) {
+                return this.loaded.has(scriptName);
+            },
+            allReady() {
+                const required = ['constants', 'utils', 'client.model', 'client.service', 'auth.service', 'navbar', 'register', 'login', 'dashboard', 'profile', 'users', 'app'];
+                return required.every(s => this.loaded.has(s));
+            }
+        };
+        console.log('✅ AppScripts registry initialized');
+    </script>
+    
+    <!-- Contenedor principal de la aplicación -->
+    <div id="app" class="d-flex flex-column min-vh-100">
+        <!-- Navbar -->
+        <nav id="navbar-container"></nav>
+        
+        <!-- Contenido principal -->
+        <main id="router-outlet" class="flex-grow-1">
+            <!-- Las vistas se cargarán aquí -->
+        </main>
+        
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-4 text-center mt-5">
+            <p class="mb-0">&copy; 2026 Clients API. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal para mensajes -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script de limpieza de modales -->
+    <script>
+        // Limpiar backdrops y estilos cuando se cierre cualquier modal
+        document.addEventListener('hidden.bs.modal', function(e) {
+            // Remover todos los backdrops residuales
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            
+            // Remover la clase modal-open del body
+            document.body.classList.remove('modal-open');
+            
+            // Resetear el padding del body
+            document.body.style.paddingRight = '';
+        });
+    </script>
+    
+    <!-- Scripts de la aplicación -->
+    <script src="frontend/src/app/shared/constants.js"></script>
+    <script src="frontend/src/app/shared/utils.js"></script>
+    <script src="frontend/src/app/core/models/client.model.js"></script>
+    <script src="frontend/src/app/core/services/client.service.js"></script>
+    <script src="frontend/src/app/core/services/auth.service.js"></script>
+    <script src="frontend/src/app/components/navbar/navbar.component.js"></script>
+    <script src="frontend/src/app/components/register/register.component.js"></script>
+    <script src="frontend/src/app/components/login/login.component.js"></script>
+    <script src="frontend/src/app/components/dashboard/dashboard.component.js"></script>
+    <script src="frontend/src/app/components/profile/profile.component.js"></script>
+    <script src="frontend/src/app/components/users/users.component.js"></script>
+    <script src="frontend/src/app/app.js"></script>
+    <script src="frontend/src/main.js"></script>
+</body>
+</html>

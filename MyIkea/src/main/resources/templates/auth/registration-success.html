@@ -1,0 +1,32 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="modal fade show" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" style="display: block; background-color: rgba(0,0,0,0.5);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-success" style="border-width: 3px;">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="successModalLabel">
+                            <i class="fas fa-check-circle"></i> ¡Cuenta Creada Exitosamente!
+                        </h5>
+                    </div>
+                    <div class="modal-body text-center py-4">
+                        <div style="font-size: 3rem; color: #28a745; margin-bottom: 1rem;">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h6 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">
+                            ¡Bienvenido a MyIkea!
+                        </h6>
+                        <p class="text-muted mb-0">
+                            Tu cuenta ha sido creada correctamente. Ahora puedes iniciar sesión con tus credenciales.
+                        </p>
+                    </div>
+                    <div class="modal-footer justify-content-center border-top-0">
+                        <a href="/login" class="btn btn-success btn-lg px-4">
+                            Aceptar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

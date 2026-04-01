@@ -1,0 +1,41 @@
+<div class="spa-fragment" xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="spa-content">
+        <div class="container mt-4 mb-6" style="margin-bottom: 8rem;">
+            
+            <!-- Si no hay usuarios -->
+            <div th:if="${users == null or users.isEmpty()}" class="alert alert-info">
+                <p>No hay usuarios registrados.</p>
+            </div>
+            
+            <!-- Si hay usuarios -->
+            <th:block th:if="${users != null and !users.isEmpty()}">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iterar usuarios desde el modelo -->
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td><span th:each="role, stat : ${user.roles}" th:text="${role.name} + (${stat.last} ? '' : ', ')"></span></td>
+                    <td><a th:href="@{/users/delete/{id}(id=${user.id})}"
+                        class="btn btn-danger btn-sm"
+                        th:if="${ADMIN ?: false}">
+                        Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </th:block>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients - Gestión de Clientes</title>
+    
+    <!-- Base URL para rutas relativas en SPA -->
+    <base href="/frontend/src/">
+    
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="app/app.css">
+    
+    <!-- Sistema de registro de scripts -->
+    <script>
+        // Crear sistema de registro de scripts
+        window.AppScripts = {
+            loaded: new Set(),
+            register(scriptName) {
+                this.loaded.add(scriptName);
+                console.log(`✅ ${scriptName} cargado (${this.loaded.size}/${this.required ? this.required.length : '?'})`);
+            },
+            isReady(scriptName) {
+                return this.loaded.has(scriptName);
+            },
+            allReady() {
+                if (!this.required) return false;
+                return this.required.every(script => this.loaded.has(script));
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Contenedor principal de la aplicación -->
+    <div id="app">
+        <div id="navbar-container"></div>
+        <main id="router-outlet" class="container mt-4">
+            <div class="text-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Initializing Application...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts de la aplicación -->
+    <script src="app/shared/constants.js"></script>
+    <script src="app/shared/utils.js"></script>
+    <script src="app/core/models/client.model.js"></script>
+    <script src="app/core/services/client.service.js"></script>
+    <script src="app/core/services/auth.service.js"></script>
+    <script src="app/components/navbar/navbar.component.js"></script>
+    <script src="app/components/register/register.component.js"></script>
+    <script src="app/components/login/login.component.js"></script>
+    <script src="app/components/dashboard/dashboard.component.js"></script>
+    <script src="app/components/profile/profile.component.js"></script>
+    <script src="app/components/users/users.component.js"></script>
+    <script src="app/app.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

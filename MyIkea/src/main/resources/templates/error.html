@@ -1,0 +1,23 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <header th:replace="~{fragments/header::header}"></header>
+    <div class="container my-5 flex-grow-1">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="card border-danger shadow-sm">
+                    <div class="card-header bg-danger text-white">
+                        <h2 class="mb-0">Vaya! Algo salio mal</h2>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title text-danger mb-4">Se ha producido un error</h4>
+                        <p class="card-text lead" th:text="${error ?: 'Ha ocurrido un error inesperado.'}">Ha ocurrido un error inesperado.</p>
+                        <hr>
+                        <p>Si el problema persiste, contacta con soporte.</p>
+                        <a href="/" class="btn btn-primary mt-3">
+                            <i class="fas fa-home"></i> Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
