@@ -204,7 +204,7 @@ const Utils = {
             // Detectar tipo de error
             if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                 console.error('🔌 CORS or Connection Issue Detected');
-                throw new Error('CORS_ERROR: The API server may not be running or CORS is not configured. Make sure the API is running at: http://localhost:8080');
+                throw new Error('CORS_ERROR: No API available. Nginx is trying to connect to: http://localhost:8080 (primary) → https://localhost:7200 (fallback). Make sure at least one API is running.');
             }
             
             throw error;
@@ -249,7 +249,7 @@ const Utils = {
             // Detectar tipo de error
             if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                 console.error('🔌 CORS or Connection Issue Detected');
-                throw new Error('CORS_ERROR: The API server may not be running or CORS is not configured. Make sure the API is running at: http://localhost:8080');
+                throw new Error('CORS_ERROR: No API available. Nginx is trying to connect to: http://localhost:8080 (primary) → https://localhost:7200 (fallback). Make sure at least one API is running.');
             }
             
             throw error;

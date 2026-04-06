@@ -396,17 +396,18 @@ class RegisterComponent {
             // Detectar tipo de error específico
             if (error.message.includes('CORS_ERROR')) {
                 errorTitle = '⚠️ API Connection Issue';
-                errorMessage = 'The API server (http://localhost:8080) is not responding or CORS is not configured.<br><br>' +
+                errorMessage = 'No API available. Nginx tried to connect to:<br>' +
+                              '1. <code>http://localhost:8080</code> (primary)<br>' +
+                              '2. <code>https://localhost:7200</code> (fallback)<br><br>' +
                               '<strong>Solution:</strong><br>' +
-                              '1. Make sure the API is running: <code>mvn spring-boot:run</code><br>' +
-                              '2. Configure CORS in the backend (see CorsConfig.java)<br>' +
-                              '3. Restart the API after changes';
+                              '• Make sure at least one API is running<br>' +
+                              '• Check that CORS is configured in the backend';
             } else if (error.message.includes('Failed to fetch')) {
                 errorTitle = '🔌 Connection Error';
-                errorMessage = 'Cannot connect to the API at http://localhost:8080<br><br>' +
+                errorMessage = 'Cannot connect to any API server.<br><br>' +
                               '<strong>Make sure:</strong><br>' +
-                              '• The backend API is running<br>' +
-                              '• The URL is correct in constants.js<br>' +
+                              '• At least one API is running (port 8080 or 7200)<br>' +
+                              '• CORS is properly configured<br>' +
                               '• Your internet connection is working';
             } else if (error.message.includes('400')) {
                 errorMessage = MESSAGES.ERROR.VALIDATION_ERROR;

@@ -6,8 +6,8 @@ window.MyIkeaApp.init = async function initMyIkeaApp() {
   }
   window.MyIkeaApp.initialized = true;
 
-  const API_BASE_URL = window.__API_BASE_URL__ || "http://localhost:8080";
-  const AUTH_REFRESH_PATH = "/api/v1/auth/refresh";
+  const API_BASE_URL = window.__API_BASE_URL__ || "/api";
+  const AUTH_REFRESH_PATH = "/v1/auth/refresh";
   const AUTH_HINT_KEY = "myikea.auth.hint";
 
   const state = {

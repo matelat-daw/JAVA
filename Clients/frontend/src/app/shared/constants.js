@@ -3,6 +3,7 @@
  */
 
 const API_CONFIG = {
+    // API en HTTPS mediante proxy nginx: http://localhost/api → https://localhost:7200/api (ASP.NET)
     BASE_URL: '/api',
     TIMEOUT: 5000,
     ENDPOINTS: {

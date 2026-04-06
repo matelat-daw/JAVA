@@ -30,19 +30,44 @@ class AuthService {
             console.log('🔐 Intentando login con:', { email });
 
             const response = await Utils.makeRequest('POST', url, data);
+            console.log('📥 Respuesta del servidor:', response);
 
-            // Si la respuesta es exitosa, guardar datos del usuario
-            if (response.success || (response.code === 200 && response.data)) {
-                const userData = response.data || response.user;
-                const token = response.token;
-                
+            // Detectar si el login fue exitoso - flexible para diferentes formatos de API
+            let isSuccess = false;
+            let userData = null;
+            let token = null;
+
+            // Formato 1: response.success
+            if (response.success === true) {
+                isSuccess = true;
+                userData = response.data || response.user || response;
+                token = response.token;
+            }
+            // Formato 2: response.code === 200 con data
+            else if (response.code === 200 && (response.data || response.user)) {
+                isSuccess = true;
+                userData = response.data || response.user;
+                token = response.token;
+            }
+            // Formato 3: respuesta directa con token (API .NET)
+            else if (response.token) {
+                isSuccess = true;
+                userData = response.data || response.user || response;
+                token = response.token;
+            }
+            // Formato 4: HTTP 200 sin estructura específica (asumir éxito con token)
+            else if (!response.error && !response.message?.includes('failed') && !response.message?.includes('invalid')) {
+                isSuccess = true;
+                userData = response.data || response.user || response;
+                token = response.token || response.access_token;
+            }
+
+            if (isSuccess && token) {
                 // Guardar datos del usuario en sessionStorage
                 this.setUserSession(userData);
                 
-                // Guardar token JWT si viene en la respuesta
-                if (token) {
-                    this.setJwtToken(token);
-                }
+                // Guardar token JWT
+                this.setJwtToken(token);
 
                 console.log('✅ Login exitoso, usuario:', userData);
                 console.log('🔑 Token JWT guardado:', !!token);
@@ -52,11 +77,24 @@ class AuthService {
                     user: userData,
                     token: token
                 };
+            } else if (isSuccess) {
+                // Login exitoso pero sin token
+                this.setUserSession(userData);
+                console.log('✅ Login exitoso (sin token), usuario:', userData);
+                return {
+                    success: true,
+                    message: response.message || 'Login exitoso',
+                    user: userData,
+                    token: null
+                };
             }
 
+            // Si llegamos aquí, algo salió mal
+            const errorMsg = response.message || response.error || 'Error en login';
+            console.error('❌ Login falló:', errorMsg);
             return {
                 success: false,
-                message: response.message || 'Error en login'
+                message: errorMsg
             };
         } catch (error) {
             console.error('❌ Error en login:', error);
