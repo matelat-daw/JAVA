@@ -3,6 +3,7 @@ package com.futureprograms.MyIkea.Api.Controllers;
 import com.futureprograms.MyIkea.Api.Dto.UserProfileDto;
 import com.futureprograms.MyIkea.Api.Mapper.ApiMapper;
 import com.futureprograms.MyIkea.Services.auth.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ public class AdminUsersApiController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserProfileDto> getUsers() {
         return userService.getAllUsers().stream()
                 .map(ApiMapper::toUserProfileDto)

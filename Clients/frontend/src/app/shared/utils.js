@@ -173,7 +173,8 @@ const Utils = {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+					...AuthService.getAuthorizationHeader()
                 },
                 mode: 'cors',
                 credentials: 'include'
@@ -223,6 +224,9 @@ const Utils = {
             const options = {
                 method: method,
                 // NO establecer Content-Type - el navegador lo hará automáticamente con boundary
+				headers: {
+					...AuthService.getAuthorizationHeader()  // ← AGREGAR ESTO
+				},
                 mode: 'cors',
                 credentials: 'include',
                 body: formData
