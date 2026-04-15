@@ -3,8 +3,8 @@
  */
 
 const API_CONFIG = {
-    // API en HTTPS mediante proxy nginx: http://localhost/api → https://localhost:7200/api (ASP.NET)
-    BASE_URL: '/api',
+    // API en localhost:8080 (Java Spring Boot)
+    BASE_URL: 'http://localhost:8080/api',
     TIMEOUT: 5000,
     ENDPOINTS: {
         REGISTER: '/user/register',
